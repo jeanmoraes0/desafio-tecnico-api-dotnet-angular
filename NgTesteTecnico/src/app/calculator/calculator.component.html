@@ -1,0 +1,78 @@
+<div class="card">
+    <h3 class="card-header">Calcular</h3>
+    <div class="card-body">
+        <form (ngSubmit)="onSubmit()" [formGroup]="form">
+            <div class="form-group row valor">
+                <label for="colFormLabel" class="col-sm-4 col-form-label">Valor</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">R$</span>
+                        </div>
+                        <input step="0.01" min="0.01" type="number" placeholder="Digite o valor"
+                            [ngClass]="{'is-invalid': valor.invalid && (valor.dirty || valor.touched)}"
+                            class="form-control" id="valor" formControlName="valor" required>
+                    </div>
+                    <div *ngIf="valor.invalid && (valor.dirty || valor.touched)">
+                        <small class="text-danger">
+                            Por favor entre com um valor.
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="colFormLabel" class="col-sm-4 col-form-label">Parcelas</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input type="number" placeholder="Digite a parcela"
+                            [ngClass]="{'is-invalid': parcela.invalid && (parcela.dirty || parcela.touched)}"
+                            class="form-control" id="parcela" formControlName="parcela" required>
+                    </div>
+                    <div *ngIf="parcela.invalid && (parcela.dirty || parcela.touched)">
+                        <div *ngIf="parcela.errors.required || parcela.errors.min">
+                            <small class="text-danger">
+                                Por favor entre com a parcela.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">Calcular</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card mt-3">
+    <h3 class="card-header">Resultado</h3>
+    <div class="card-body">
+        <div class="row" [ngSwitch]="result > 0">
+            <div class="col text-center">
+                <p>Valor</p>
+                <div>
+                    <p *ngSwitchCase="false">&mdash;</p>
+                    <h5 *ngSwitchCase="true">{{calculation.valor.toLocaleString("pt-br", {style: "currency", currency:
+                        "BRL"})}}</h5>
+                </div>
+            </div>
+            <div class="col text-center">
+                <p>Parcelas</p>
+                <p *ngSwitchCase="false">&mdash;</p>
+                <h5 *ngSwitchCase="true">{{calculation.parcela}}</h5>
+            </div>
+            <div class="col text-center">
+                <p>Taxa</p>
+                <p *ngSwitchCase="false">&mdash;</p>
+                <h5 *ngSwitchCase="true">5%</h5>
+            </div>
+            <div class="col text-center">
+                <p>Cálculo</p>
+                <p *ngSwitchCase="false">&mdash;</p>
+                <h5 *ngSwitchCase="true">{{result.toLocaleString("pt-br", {style: "currency", currency: "BRL"})}}</h5>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="error" class="alert alert-danger text-center mt-3" role="alert">
+    Connection error!
+</div>
